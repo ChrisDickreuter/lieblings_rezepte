@@ -1,47 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import RecipeList from '../components/RecipeList.vue'
+import getRecipes from '../composables/getRecipes';
 
-const recipes = ref([
-  {
-    id: 1,
-    title: 'Gnocci Lachs Sahne Gratin',
-    kindOfRecipe: 'Heissluft-Fritteuse',
-    ingredients: [
-      '1 kg Gnocci, aus dem Kühlregal',
-      '4 Lachsfilets, TK',
-      '500 ml Sahne',
-      '140 g Tomatenmark',
-      'Knoblauch getrocknet',
-      '2 TL Gemüsebrühpulver',
-      'Salz, Pfeffer',
-      '1 TL Dill'
-    ],
-    steps:
-      'Gnocci in die Heissluft-Fritteuse geben und 15 Minuten bei 180 Grad backen. Lachsfilets auf die Gnocci legen. Sahne, Tomatenmark, Knoblauch, Gemüsebrühpulver, Salz, Pfeffer und Dill in einer Schüssel verrühren und über die Lachsfilets geben. 15 Minuten bei 180 Grad backen.'
-  },
-  {
-    id: 2,
-    title: 'Hühnersuppe',
-    kindOfRecipe: 'Herd',
-    ingredients: [
-      '6 Hühnerkeulen',
-      '2 Karotten',
-      '2 Stangen Sellerie',
-      '1 große Zwiebel',
-      'Salz',
-      'Pfeffer',
-      'Wasser'
-    ],
-    steps:
-      'Das Huhn, Karotten, Sellerie und Zwiebel in einen großen Topf geben. Mit Wasser bedecken und zum Kochen bringen. Reduzieren Sie die Hitze auf niedrig und lassen Sie es 2-3 Stunden köcheln. Mit Salz und Pfeffer abschmecken.'
-  }
-])
+const { recipes, error, load } = getRecipes()
+
+load()
 </script>
 
 <template>
   <main>
     <h1>Lieblings Rezepte</h1>
-    <RecipeList :recipes="recipes" />
+    <p v-if="error">Error: {{ error }}</p>
+    <div v-if="recipes.length">
+      <RecipeList :recipes="recipes" />
+    </div>
+    <div v-else>Loading...</div>
   </main>
 </template>
